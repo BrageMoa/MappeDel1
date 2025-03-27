@@ -3,7 +3,7 @@ import json
 
 url = "https://api.met.no/weatherapi/locationforecast/2.0/compact"
 params = {"lat": 63.42, "lon": 10.39}  # Koordinater for Trondheim
-headers = {"User-Agent": "Trø-IT Miljødataanalyse v1.0"}  # Bedre identifikasjon
+headers = {"User-Agent": "Trø-IT Miljødataanalyse v1.0"}
 
 try:
     response = requests.get(url, params=params, headers=headers)
