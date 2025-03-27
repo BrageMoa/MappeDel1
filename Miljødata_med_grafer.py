@@ -1,94 +1,76 @@
-import requests
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-# API-forespørsel
-url = "https://api.met.no/weatherapi/locationforecast/2.0/compact"
-headers = {"User-Agent": "Trø-IT Miljødataanalyse v1.0 (contact@example.com)"}
+# Bruk en moderne stil
+sns.set_theme(style="darkgrid")
 
-# Brukerdrevet koordinatinntasting
-try:
-    lat = float(input("Skriv inn breddegrad: "))
-    lon = float(input("Skriv inn lengdegrad: "))
-except ValueError:
-    print("Ugyldige koordinater! Bruk desimaltall.")
-    exit()
+# Les inn JSON-filen
+with open("miljødata.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
 
-params = {"lat": lat, "lon": lon}
+# Ekstraher tidspunkter og værparametere
+times = []
+temps = []
+wind_speeds = []
+precipitations = []
 
-try:
-    response = requests.get(url, params=params, headers=headers)
-    response.raise_for_status()
-    data = response.json()
-
-    with open("miljødata.json", "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
-
-except requests.exceptions.HTTPError as e:
-    print(f"HTTP-feil: {e.response.status_code} - {e.response.reason}")
-    exit()
-except requests.exceptions.ConnectionError:
-    print("Tilkoblingsfeil! Sjekk nettverket ditt.")
-    exit()
-except requests.exceptions.Timeout:
-    print("Forespørselen tok for lang tid!")
-    exit()
-except requests.exceptions.RequestException as e:
-    print(f"API-forespørsel feilet: {e}")
-    exit()
-
-# Les og behandle JSON-filen
-try:
-    with open("miljødata.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    if "properties" in data and "timeseries" in data["properties"]:
-        timeseries = data["properties"]["timeseries"]
-    else:
-        print("Feil: Timeseries-data mangler!")
-        exit()
-
-    # Ekstraher tidspunkter og værparametere
-    times, temps, wind_speeds, precipitations = [], [], [], []
-    for entry in timeseries:
-        times.append(entry["time"])
-        details = entry["data"]["instant"]["details"]
-        temps.append(details.get("air_temperature", float('nan')))
-        wind_speeds.append(details.get("wind_speed", float('nan')))
-        precip = entry["data"].get("next_1_hours", {}).get("details", {}).get("precipitation_amount")
-        precipitations.append(float('nan') if precip is None else precip)
-
-    # Opprett DataFrame
-    df = pd.DataFrame({
-        "Time": pd.to_datetime(times),
-        "Temperature (°C)": temps,
-        "Wind Speed (m/s)": wind_speeds,
-        "Precipitation (mm)": precipitations
-    }).sort_values("Time")
-
-    # Plotting
-    fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10, 12), sharex=True)
-    axes[0].plot(df["Time"], df["Temperature (°C)"], marker="o", linestyle="-", color="b", label="Temperatur")
-    axes[1].plot(df["Time"], df["Wind Speed (m/s)"], marker="s", linestyle="--", color="g", label="Vindhastighet")
-    axes[2].plot(df["Time"], df["Precipitation (mm)"], marker="^", linestyle=":", color="c", label="Nedbør")
+for entry in data["properties"]["timeseries"]:
+    times.append(entry["time"])
     
-    for ax in axes:
-        ax.legend()
-        ax.grid()
-    
-    axes[0].set_ylabel("Temperatur (°C)")
-    axes[1].set_ylabel("Vindhastighet (m/s)")
-    axes[2].set_ylabel("Nedbør (mm)")
-    axes[2].set_xlabel("Tid")
-    axes[2].xaxis.set_major_locator(plt.MaxNLocator(nbins=6))
-    fig.autofmt_xdate()
-    plt.tight_layout()
-    plt.savefig("miljødata_plot.png", dpi=300)
-    plt.show()
+    details = entry["data"]["instant"]["details"]
+    temps.append(details.get("air_temperature", None))
+    wind_speeds.append(details.get("wind_speed", None))
+    precipitations.append(entry["data"].get("next_1_hours", {}).get("details", {}).get("precipitation_amount", 0))
 
-    # Vis første 10 rader
-    print(df.head(10))
+# Opprett DataFrame
+df = pd.DataFrame({
+    "Time": pd.to_datetime(times),
+    "Temperature (°C)": temps,
+    "Wind Speed (m/s)": wind_speeds,
+    "Precipitation (mm)": precipitations
+})
 
-except (FileNotFoundError, json.JSONDecodeError) as e:
-    print(f"Feil ved lesing av JSON-fil: {e}")
+df = df.sort_values("Time")
+
+# Opprett figur med 3 separate grafer
+fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(12, 10), sharex=True)
+
+# Fargevalg
+colors = sns.color_palette("viridis", 3)
+
+# Temperatur-plot
+axes[0].plot(df["Time"], df["Temperature (°C)"], marker="o", linestyle="-", color=colors[0], linewidth=2)
+axes[0].fill_between(df["Time"], df["Temperature (°C)"], alpha=0.2, color=colors[0])
+axes[0].set_ylabel("Temperatur (°C)", fontsize=12)
+axes[0].set_title("Temperaturutvikling i Trondheim", fontsize=14, fontweight="bold")
+axes[0].grid(True, linestyle="--", alpha=0.6)
+
+# Vindhastighet-plot
+axes[1].plot(df["Time"], df["Wind Speed (m/s)"], marker="s", linestyle="--", color=colors[1], linewidth=2)
+axes[1].fill_between(df["Time"], df["Wind Speed (m/s)"], alpha=0.2, color=colors[1])
+axes[1].set_ylabel("Vindhastighet (m/s)", fontsize=12)
+axes[1].set_title("Vindhastighet i Trondheim", fontsize=14, fontweight="bold")
+axes[1].grid(True, linestyle="--", alpha=0.6)
+
+# Nedbør-plot
+axes[2].plot(df["Time"], df["Precipitation (mm)"], marker="^", linestyle=":", color=colors[2], linewidth=2)
+axes[2].fill_between(df["Time"], df["Precipitation (mm)"], alpha=0.2, color=colors[2])
+axes[2].set_ylabel("Nedbør (mm)", fontsize=12)
+axes[2].set_title("Nedbør i Trondheim", fontsize=14, fontweight="bold")
+axes[2].set_xlabel("Tid", fontsize=12)
+axes[2].grid(True, linestyle="--", alpha=0.6)
+
+# Forbedre x-aksen
+plt.xticks(rotation=30, ha="right", fontsize=10)
+
+# Juster mellomrom mellom plott
+plt.tight_layout()
+
+# Vis grafer
+plt.show()
+
+# Skriv ut første 10 rader for å vise data
+print(df.head(10))
+
