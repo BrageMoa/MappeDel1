@@ -31,6 +31,7 @@ if data:
 
     except (FileNotFoundError, json.JSONDecodeError) as e:
         print(f"Feil ved lesing av JSON-fil: {e}")
+        
 
 
 
