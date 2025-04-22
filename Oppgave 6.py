@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 
 #Laster inn JSON-data
-data = pd.read_json('miljødata.json')
+data = pd.read_json('data/miljødata.json')
 
 #Trekker ut timeseriedata
 timeseries = data.loc['timeseries', 'properties']

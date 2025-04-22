@@ -10,7 +10,7 @@ try:
     response.raise_for_status()  # Kaster en feil hvis statuskode er 4xx eller 5xx
     data = response.json()
 
-    with open("miljødata.json", "w", encoding="utf-8") as f:
+    with open("data/miljødata.json", "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
 
 except requests.exceptions.RequestException as e:
@@ -19,7 +19,7 @@ except requests.exceptions.RequestException as e:
 
 if data:
     try:
-        with open("miljødata.json", "r", encoding="utf-8") as f:
+        with open("data/miljødata.json", "r", encoding="utf-8") as f:
             data = json.load(f)
 
         print(json.dumps(data, indent=4))  # Formaterer JSON-data pent

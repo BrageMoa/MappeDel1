@@ -5,7 +5,7 @@ from datetime import datetime
 import numpy as np
 
 # Laster inn værdata fra JSON-fil
-with open('miljødata.json', 'r', encoding='utf-8') as file:
+with open('data/miljødata.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
 # Henter ut timeserien
