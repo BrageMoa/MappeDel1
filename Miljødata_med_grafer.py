@@ -7,7 +7,7 @@ import seaborn as sns
 sns.set_theme(style="darkgrid")
 
 # Vi leser inn JSON-filen "miljødata.json" som inneholder dataene fra API-en
-with open("miljødata.json", "r", encoding="utf-8") as f:
+with open("data/miljødata.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
 # Vi tar ut de tidspunktene og værparameterene fra JSON-fil dataene som vi øsnker å fremvise
