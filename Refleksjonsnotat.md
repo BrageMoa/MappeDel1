@@ -1,0 +1,17 @@
+Gjennom dette prosjektet har vi fått en grundig innføring i hele prosessen med å hente inn, behandle, analysere og visualisere miljødata. Arbeidet startet med å finne relevante åpne datakilder, og vi lærte raskt at det ikke alltid er rett frem å hente data fra API-er. Det krevde en del innsikt i JSON-struktur og håndtering av API-responser for å få ut de dataene vi trengte på en brukbar måte. Denne delen var utfordrende, men også veldig lærerik for oss alle.
+
+Vi har også fått en grundigere forståelse for hva hensikten ved en ".gitignore"-fil er i et slikt prosjekt, og hvordan vi kan nytte det for å bedre strukturen og ryddigheten i prosjektoppsettet.
+
+I arbeidet med databehandling brukte vi Pandas til å rydde opp i datasettet og håndtere manglende verdier. Vi erfarte at datasett sjelden er perfekte, og det å identifisere og fylle inn eller fjerne manglende verdier var en viktig del av å sikre god kvalitet i analysen vår. NumPy ble brukt for å beregne statistiske mål som gjennomsnitt, median og standardavvik for temperatur og lufttrykk, noe som ga oss en bedre forståelse av variasjonene i dataene.
+
+Når vi kom til visualiseringsdelen, brukte vi både Matplotlib og Seaborn. Vi laget blant annet en dobbel-akse-graf for å sammenligne temperatur og trykk over tid, og en ekstra Seaborn-figur for en penere fremstilling av temperaturutviklingen. Vi opplevde at scatterplottet med regresjonslinje var spesielt nyttig for å vise sammenhengen mellom temperatur og luftfuktighet, mens søylediagrammet fungerte greit for å sammenligne faktiske og predikerte verdier, selv om det kunne bli litt rotete ved mange datapunkter. Linjediagrammet over tid gjorde det enklere å oppdage trender og raske endringer. Vi testet også hvordan manglende verdier påvirker datavisualiseringene våre, og så at dette kunne gjøre det vanskeligere å tolke trendene korrekt.
+
+Underveis ble vi tryggere på å bruke biblioteker som Pandas, NumPy, Matplotlib, Seaborn og scikit-learn. Det var også veldig lærerikt å trene en enkel lineær regresjonsmodell for å forutsi miljøforhold, og forstå hvordan valg av funksjoner og håndtering av data påvirker modellens nøyaktighet.
+
+Samarbeidet i gruppen fungerte bra. Vi fordelte oppgavene tidlig og holdt jevnlig kontakt underveis. Vi kunne kanskje vært enda flinkere til å dokumentere arbeidsfordelingen mer detaljert, men generelt jobbet vi effektivt sammen og støttet hverandre godt når det dukket opp utfordringer.
+
+Vi er fornøyde med sluttresultatet, spesielt visualiseringene som ble ryddige og informative. Dersom vi skulle forbedret prosjektet videre, kunne vi tenke oss å lage mer interaktive visualiseringer. Vi kunne også utforsket flere avanserte maskinlæringsmodeller for å få enda bedre prediksjoner.
+
+Prosjektet har gitt oss en mye bedre forståelse av datavitenskap i praksis, og vi tar med oss erfaringene både videre i studiene og i fremtidige jobbsituasjoner, spesielt når det gjelder håndtering av data, kvalitetssikring og formidling av innsikt på en tydelig måte.
+
+Videre kan prosjektet benyttes til å sette dataene vi har funnet i et historisk perspektiv, og på denne måten sammenlikne tidligere vær for blant annet å se klimaendringer i et gitt område. Det kan på denne måten også benyttes i en prediktiv sammenheng, der vi kan legge inn programvare som analyserer tidligere data for å forutsi vær og værendringer.
