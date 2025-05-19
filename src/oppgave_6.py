@@ -1,4 +1,3 @@
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 
 #Laster inn JSON-data
-data = pd.read_json('data/miljødata.json')
+data = pd.read_json('data/miljodata.json')
 
 #Trekker ut timeseriedata
 timeseries = data.loc['timeseries', 'properties']
